@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Ecológica</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+        }
+
+        .slide {
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+            
+            /*tentativa de alinhar as divs*/
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height:auto; /* Define que a div ocupa a altura total do ecrã */
+            margin: 0; /* Remove margens, caso necessário */
+            /*tentativa de alinhar as divs*/
+        }
+
+        .active {
+            display: block;
+            opacity: 1;
+        }
+
+        .question-container {
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            text-align: center;
+        }
+
+        .category {
+            font-weight: bold;
+        }
+
+        .orange-container {
+            background-color: #FFA500;
+            /* Laranja */
+        }
+
+        .grey-container {
+            background-color: #868686;
+            /* Cinzento */
+        }
+
+        .green-container {
+            background-color: #2E8B57;
+            /* Verde */
+        }
+
+        .blue-container {
+            background-color: #4682B4;
+            /* Azul */
+        }
+
+        .yellow-container {
+            background-color: #FFD700;
+            /* Amarelo */
+        }
+
+        .purple-container {
+            background-color: #800080;
+            /* Roxo */
+        }
+
+        input[type="text"],
+        select {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #4CAF50;
+            /* Verde */
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .result-container {
+            position: relative;
+            width: 50%;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background: url('marca-de-agua.png') no-repeat center center;
+            background-size: cover;
+            text-align: center;
+            border: 2px solid #4CAF50;
+            /* Borda verde */
+        }
+
+        .result-text {
+            position: relative;
+            z-index: 1;
+            color: rgb(0, 0, 0);
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="home">
+        <h1>Calculadora Ecológica</h1>
+        <button onclick="startQuiz()">Seguir para as perguntas</button>
+    </div>
+
+    <div id="slides">
+        <!-- Slide 1 -->
+        <div class="slide orange-container question-container">
+            <h2>Deslocações</h2>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide orange-container question-container">
+            <div class="category">Deslocações</div>
+            <div class="question open-ended">Quantas pessoas participaram na tua atividade?</div>
+            <input type="text" id="q1">
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide orange-container question-container">
+            <div class="category">Deslocações</div>
+            <div class="question open-ended">A quantos kilómetros da tua sede o local se encontra?</div>
+            <input type="text" id="q2">
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide orange-container question-container">
+            <div class="category">Deslocações</div>
+            <div class="question option">Qual o meio de transporte que utilizaste na deslocação para a tua atividade?
+            </div>
+            <select id="q3">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="2">Transporte público</option>
+                <option value="4">Veículo particular</option>
+                <option value="1">Bicicleta/Trotinete/A pé</option>
+                <option value="3">Veículo partilhado</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!----------------------------------------------------------------------------------------------------------->
+
+        <!-- Slide 5 -->
+        <div class="slide grey-container question-container">
+            <h2>Tipologia de Atividade</h2>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide grey-container question-container">
+            <div class="category">Tipologia de Atividade</div>
+            <div class="question option">O que consideraste mais importante na escolha do local?</div>
+            <select id="q4">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="1">Sustentabilidade ambiental</option>
+                <option value="2">Distância</option>
+                <option value="3">Paisagem</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 7 -->
+        <div class="slide grey-container question-container">
+            <div class="category">Tipologia de Atividade</div>
+            <div class="question option">Que tipo de material utilizaste para jogos, comunicação, etc?</div>
+            <select id="q5">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="2">Material reciclado</option>
+                <option value="3">Material novo</option>
+                <option value="1">Material digital</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 8 -->
+        <div class="slide grey-container question-container">
+            <div class="category">Tipologia de Atividade</div>
+            <div class="question option">A tua atividade vai ter t'shirts, outras peças ou objetos exclusivamente
+                concebidos para a atividade (merchandising)?</div>
+            <select id="q6">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="2">Sim</option>
+                <option value="1">Não</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 9 -->
+        <div class="slide grey-container question-container">
+            <div class="category">Tipologia de Atividade</div>
+            <div class="question option">Realizaste alguma dinâmica ambiental durante a tua atividade?</div>
+            <select id="q7">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="1">Sim</option>
+                <option value="2">Não</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!----------------------------------------------------------------------------------------------------------->
+
+        <!-- Slide 10 -->
+        <div class="slide green-container question-container">
+            <h2>Alimentação</h2>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 11 -->
+        <div class="slide green-container question-container">
+            <div class="category">Alimentação</div>
+            <div class="question option">Onde compraste os alimentos utilizados para as refeições?</div>
+            <select id="q8">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="4">Hipermercado</option>
+                <option value="3">Mercado local</option>
+                <option value="2">Produtor biológico</option>
+                <option value="1">Horta doméstica</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 12 -->
+        <div class="slide green-container question-container">
+            <div class="category">Alimentação</div>
+            <div class="question option">A que prestaste mais atenção na compra dos alimentos?</div>
+            <select id="q9">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="3">Preço</option>
+                <option value="0">Rótulo</option>
+                <option value="1">Origem</option>
+                <option value="2">Embalamento</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 13 -->
+        <div class="slide green-container question-container">
+            <div class="category">Alimentação</div>
+            <div class="question open-ended">Quantos quilos de __________ foram consumidos na tua atividade?</div>
+            <input type="text" id="q10">
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!----------------------------------------------------------------------------------------------------------->
+
+        <!-- Slide 14 -->
+        <div class="slide blue-container question-container">
+            <h2>Água</h2>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 15 -->
+        <div class="slide blue-container question-container">
+            <div class="category">Água</div>
+            <div class="question option">O que fizeste com a água utilizada na lavagem de alimentos?</div>
+            <select id="q11">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="2">Deitei fora</option>
+                <option value="1">Reaproveitei</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 16 -->
+        <div class="slide blue-container question-container">
+            <div class="category">Água</div>
+            <div class="question option">Como lavaste a louça na tua atividade?</div>
+            <select id="q12">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="2">Água corrente</option>
+                <option value="1">Água em bacia</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 17 -->
+        <div class="slide blue-container question-container">
+            <div class="category">Água</div>
+            <div class="question option">Que tipo de itens de limpeza biodegradáveis utilizaste?</div>
+            <select id="q13">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="2">Material de cozinha</option>
+                <option value="2">Material de banho</option>
+                <option value="1">Material de cozinha e banho</option>
+                <option value="3">Nenhum</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+
+
+        <!----------------------------------------------------------------------------------------------------------->
+
+        <!-- Slide 18 -->
+        <div class="slide yellow-container question-container">
+            <h2>Energia</h2>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 19 -->
+        <div class="slide yellow-container question-container">
+            <div class="category">Energia</div>
+            <div class="question option">Que tipo de energias renováveis uitilizaste?</div>
+            <select id="q14">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="1">Hídrica</option>
+                <option value="1">Solar</option>
+                <option value="1">Eólica</option>
+                <option value="2">Não utilizei</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 20 -->
+        <div class="slide yellow-container question-container">
+            <div class="category">Energia</div>
+            <div class="question option">A que tipo de energia/combustível recorreste para confecionar as refeições?
+            </div>
+            <select id="q15">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="1">Energia solar</option>
+                <option value="2">Gás</option>
+                <option value="3">Lenha</option>
+                <option value="4">Óleo</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 21 -->
+        <div class="slide yellow-container question-container">
+            <div class="category">Energia</div>
+            <div class="question option">Que tipo de fogo utilizaste na realização do teu fogo de conselho?</div>
+            <select id="q16">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="4">Fogueira</option>
+                <option value="3">Lanterna a gás</option>
+                <option value="2">Lanterna elétrica</option>
+                <option value="1">Um símbolo representante do fogo</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!----------------------------------------------------------------------------------------------------------->
+
+        <!-- Slide 22 -->
+        <div class="slide purple-container question-container">
+            <h2>Resíduos</h2>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 23 -->
+        <div class="slide purple-container question-container">
+            <div class="category">Resíduos</div>
+            <div class="question option">Que tipo de sacos utilizaste para transporte de material e/ou alimentos?</div>
+            <select id="q17">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="1">Sacos de pano</option>
+                <option value="3">Sacos de plástico</option>
+                <option value="2">Sacos de papel</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="nextSlide()">Continuar</button>
+        </div>
+
+        <!-- Slide 24 -->
+        <div class="slide purple-container question-container">
+            <div class="category">Resíduos</div>
+            <div class="question option">Quanto foi a produção de resíduos na tua atividade?</div>
+            <select id="q18">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="1">Nenhuma</option>
+                <option value="2">Quase nada (menos que 1 saco por equipa)</option>
+                <option value="3">Alguma (1 saco por equipa)</option>
+                <option value="4">Muita (mais que 1 saco por equipa)</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="showResults()">Mostrar resultados</button>
+        </div>
+
+        <!-- Slide 25 -->
+        <div class="slide purple-container question-container">
+            <div class="category">Resíduos</div>
+            <div class="question option">Quantos tipos de separação de lixo utilizaste?</div>
+            <select id="q19">
+                <option value="" disabled selected>Escolher opção</option>
+                <option value="4">Não separei</option>
+                <option value="3">1 a 2</option>
+                <option value="2">3 a 4</option>
+                <option value="1">Mais de 4</option>
+            </select>
+            <button onclick="prevSlide()">Voltar atrás</button>
+            <button onclick="showResults()">Mostrar resultados</button>
+        </div>
+    </div>
+
+    <!----------------------------------------------------------------------------------------------------------->
+
+    <div id="results" style="display:none;">
+        <div class="result-container">
+            <h2 class="result-text">A tua pegada é...</h2>
+            <p class="result-text" id="result"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function startQuiz() {
+            document.getElementById('home').style.display = 'none';
+            showSlide(0);
+        }
+
+        function showSlide(index) {
+            slides.forEach(slide => {
+                slide.style.display = 'none';
+                slide.style.opacity = 0;
+            });
+            slides[index].style.display = 'block';
+            setTimeout(() => {
+                slides[index].style.opacity = 1;
+            }, 100);
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            } else {
+                document.getElementById('home').style.display = 'block';
+                slides[currentSlide].style.display = 'none';
+                slides[currentSlide].style.opacity = 0;
+            }
+        }
+
+        function showResults() {
+            let total = 0;
+            total += parseInt(document.getElementById('q3').value) || 0;
+            total += parseInt(document.getElementById('q4').value) || 0;
+            total += parseInt(document.getElementById('q5').value) || 0;
+            total += parseInt(document.getElementById('q6').value) || 0;
+            total += parseInt(document.getElementById('q7').value) || 0;
+            total += parseInt(document.getElementById('q10').value) || 0;
+            total += parseInt(document.getElementById('q11').value) || 0;
+            total += parseInt(document.getElementById('q12').value) || 0;
+            total += parseInt(document.getElementById('q13').value) || 0;
+            total += parseInt(document.getElementById('q14').value) || 0;
+            total += parseInt(document.getElementById('q15').value) || 0;
+            total += parseInt(document.getElementById('q16').value) || 0;
+            total += parseInt(document.getElementById('q17').value) || 0;
+            total += parseInt(document.getElementById('q18').value) || 0;
+            total += parseInt(document.getElementById('q19').value) || 0;
+
+            let message = "";
+            if (total < 10) {
+                message = "Pegada baixa";
+            } else if (total < 20) {
+                message = "Pegada moderada";
+            } else {
+                message = "Pegada alta";
+            }
+
+            document.getElementById('slides').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('result').innerText = `A tua pegada é ${total}, logo, a tua Pegada é ${message}`;
+            //document.getElementById('result').innerText = message;
+        }
+    </script>
+</body>
+
+</html>
